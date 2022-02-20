@@ -1,0 +1,30 @@
+int knapSack_Helper(int W,int wt[],int val[],vector<vector<int>> &tab,int n)
+    {
+        //Base case
+        if(n==0 || W==0){
+            return 0;
+        }
+        
+        //Memoization (or) DP
+        if(tab[n][W]!=-1){
+            return tab[n][W];
+        }
+       
+        if(wt[n-1]<=W){
+            tab[n][W] = max(val[n-1]+knapSack_Helper(W-wt[n-1],wt,val,tab,n-1),knapSack_Helper(W,wt,val,tab,n-1));
+            return tab[n][W];
+        }else if(wt[n-1]>W){
+            tab[n][W] = knapSack_Helper(W,wt,val,tab,n-1);
+            return tab[n][W];
+        }
+    }
+    
+    
+    //Function to return max value that can be put in knapsack of capacity W.
+    int knapSack(int W, int wt[], int val[], int n) 
+    { 
+      // Your code here
+      vector<vector<int>> tab(n+1,vector<int>(W+1,-1));
+       
+      return knapSack_Helper(W,wt,val,tab,n);
+    }
