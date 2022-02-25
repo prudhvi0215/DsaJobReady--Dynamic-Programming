@@ -1,11 +1,7 @@
-bool isSubsetSum(int N, int arr[], int sum){
+        bool isSubsetSum(int N, int arr[], int sum){
         // code here
-        // vector<vector<bool>> tab(N+1,vector<bool>(sum+1,-1));
-        
-        // return isSubsetSum_Helper(N,arr,sum,tab);
         
         //space or stoarge
-        
         vector<vector<bool>> tab(N+1,vector<bool>(sum+1,-1));
         
         //Initialization
@@ -39,4 +35,38 @@ bool isSubsetSum(int N, int arr[], int sum){
         }
         
         return tab[N][sum];
+    }
+    
+    
+    int sumOfArray(int arr[],int n)
+    {
+        //Base case
+        if(n==0){
+            return 0;
+        }
+        
+        int lastElement = arr[n-1];
+        
+        int subArraySum = sumOfArray(arr,n-1);
+        
+        return subArraySum + lastElement;
+    }
+    
+    
+    
+    int equalPartition(int N, int arr[])
+    {
+        // code here
+        
+        int sum = sumOfArray(arr,N);
+        
+        if(sum%2!=0){
+            return 0;
+        }
+        
+        if(isSubsetSum(N,arr,sum/2)){
+            return 1;
+        }
+        
+        return 0;
     }
