@@ -1,0 +1,32 @@
+bool isSubsetSum_Helper(int N,int arr[],int sum, vector<vector<bool>> &tab)
+    {
+        if(N==0 && sum>0){
+            return false;
+        }
+        
+        if(sum==0){
+            return true;
+        }
+
+        //Memoization
+        if(tab[N][sum]!=-1){
+            return tab[N][sum];
+        }
+        
+        
+        if(arr[N-1]<=sum){
+            tab[N][sum] = isSubsetSum_Helper(N-1,arr,sum,tab) || isSubsetSum_Helper(N-1,arr,sum-arr[N-1],tab);
+            return tab[N][sum];
+        }else if(arr[N-1]>sum) {
+            tab[N][sum] = isSubsetSum_Helper(N-1,arr,sum,tab);
+            return tab[N][sum];
+        }
+    }
+
+
+    bool isSubsetSum(int N, int arr[], int sum){
+        // code here
+        vector<vector<bool>> tab(N+1,vector<bool>(sum+1,-1));
+        
+        return isSubsetSum_Helper(N,arr,sum,tab);
+    }
