@@ -1,0 +1,84 @@
+int subsetSum(int arr[],int n,int range)
+    {
+        //Creating 2D Dp Table for storing all subsets answers
+	    vector<vector<bool>> tab(n+1,vector<bool>(range+1,-1));
+	    
+	    
+	    //Intialization 
+	    for(int i=0;i<n+1;i++)
+	    {
+	        for(int j=0;j<range+1;j++)
+	        {
+	            if(i==0){
+	                tab[i][j] = false;
+	            }
+	            
+	            if(j==0){
+	                tab[i][j] = true;
+	            }
+	        }
+	    }
+	    
+	    
+	    for(int i=1;i<n+1;i++)
+	    {
+	        for(int j=1;j<range+1;j++)
+	        {
+	            if(arr[i-1]<=j) {
+	                tab[i][j] = tab[i-1][j-arr[i-1]] || tab[i-1][j];
+	            }else if(arr[i-1] > j){
+	                tab[i][j] = tab[i-1][j];
+	            }
+	        }
+	    }
+	    
+	   
+	    //Now we need only the last row elements of the dp table, who form the actual subset
+	    //of the given array and range of the array.
+	    vector<int> subsets;
+	    
+	    
+	    for(int i=0;i<=range/2;i++){
+	        if(tab[n][i]){
+	            subsets.push_back(i);
+	        }
+	    }
+	        
+	    //Final answer holds in the below variable minEle
+	    int minEle = INT_MAX;
+	    
+	    for(int i=0;i<subsets.size();i++) {
+	        minEle = min(minEle, range - (2*subsets[i]));
+	    }
+	    
+	    return minEle;
+	    
+	    // From the ending of the range/2 will also give us the correct answer
+	   // int largestS1 = -1;
+	    
+	   // for(int i=range/2;i>=0;i--){
+	   //     if(tab[n][i]){
+	   //         largestS1 = i;
+	   //         break;
+	   //     }
+	   // }
+	    
+	   // return range - (2*largestS1);
+	    
+    }
+  
+  
+  
+	int minDifference(int arr[], int n)  { 
+	    // Your code goes here
+	    
+	    // First finding all the subsets with the range of (sum(or addition) of the given array elements) 
+	    // using susbset sum problem knowledge.
+	    
+	    int range = 0;
+	    for(int i=0;i<n;i++){
+	        range += arr[i];
+	    }
+	    
+	    return subsetSum(arr,n,range);
+	} 
