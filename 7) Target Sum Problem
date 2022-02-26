@@ -1,0 +1,71 @@
+You are given an integer array nums and an integer target.
+
+You want to build an expression out of nums by adding one of the symbols '+' and '-' before each integer in nums and then concatenate all the integers.
+
+For example, if nums = [2, 1], you can add a '+' before 2 and a '-' before 1 and concatenate them to build the expression "+2-1".
+Return the number of different expressions that you can build, which evaluates to target.
+
+
+//Solution
+
+ int subsetSum(vector<int> &nums,int n,int sum)
+    {
+        // storage or space
+        
+        vector<vector<int>> tab(n+1,vector<int>(sum+1,-1));
+        
+        
+        //Intialization 
+        //i = n(means size of array)
+        //j = sum
+        
+        for(int i=0;i<n+1;i++)
+        {
+            for(int j=0;j<sum+1;j++)
+            {
+                if(i==0){
+                    tab[i][j] = 0;
+                }
+                
+                if(j==0){
+                    tab[i][j] = 1;
+                }
+            }
+        }
+        
+        
+        //Code part
+        
+        for(int i=1;i<n+1;i++)
+        {
+            for(int j=0;j<sum+1;j++)       /// The reason we are starting here from '0' is that we need to obtain the solution for [0,0,0,0,0,1], this type of test case also.
+                                           /// Means we need to add '+' , '-' in front of 0 also.
+            {
+                if(nums[i-1]<=j){
+                    tab[i][j] = tab[i-1][j-nums[i-1]] + tab[i-1][j];
+                }else{
+                    tab[i][j] = tab[i-1][j];
+                }
+            }
+        }
+        
+        return tab[n][sum];
+    }
+    
+    
+    int findTargetSumWays(vector<int>& nums, int target) {
+        
+        int sumOfArray = accumulate(nums.begin(),nums.end(),0);
+        
+        //Edge cases
+        if(sumOfArray<abs(target) || (target+sumOfArray)%2!=0){       ///abs(): This method is used to convert the negative number to positive
+            return 0;
+        }
+        
+        
+        int sum = (target + sumOfArray)/2;
+        
+        return subsetSum(nums,nums.size(),sum);
+    }
+
+
