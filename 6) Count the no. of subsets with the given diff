@@ -1,0 +1,52 @@
+int countSubsetSum(vector<int> &nums,int n,int sum)
+    {
+        // storage or space
+        
+        vector<vector<int>> tab(n+1,vector<int>(sum+1,-1));
+        
+        
+        //Intialization 
+        //i = n(means size of array)
+        //j = sum
+        
+        for(int i=0;i<n+1;i++)
+        {
+            for(int j=0;j<sum+1;j++)
+            {
+                if(i==0){
+                    tab[i][j] = 0;
+                }
+                
+                if(j==0){
+                    tab[i][j] = 1;
+                }
+            }
+        }
+        
+        
+        //Code part
+        
+        for(int i=1;i<n+1;i++)
+        {
+            for(int j=1;j<sum+1;j++)
+            {
+                if(nums[i-1]<=j){
+                    tab[i][j] = tab[i-1][j-nums[i-1]] + tab[i-1][j];
+                }else{
+                    tab[i][j] = tab[i-1][j];
+                }
+            }
+        }
+        
+        return tab[n][sum];
+    }
+    
+    
+    int countSubsetsWithDiff(vector<int>& nums, int diff) {
+        
+        int sumOfArray = accumulate(nums.begin(),nums.end(),0);
+        
+        int sum = (diff + sumOfArray)/2;     //For understanding this step refer description of this problem
+        
+        return countSubsetSum(nums,nums.size(),sum);    //Previously done problem.
+    }
