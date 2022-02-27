@@ -1,0 +1,41 @@
+    int coinChange(int amount,int n,vector<int> &coins)
+    {
+        //storage or space
+        vector<vector<int>> tab(n+1,vector<int>(amount+1,-1));
+        
+        //Initialization
+        for(int i=0;i<n+1;i++)
+        {
+            for(int j=0;j<amount+1;j++)
+            {
+                if(i==0){
+                    tab[i][j] = 0;
+                }
+                
+                if(j==0){
+                    tab[i][j] = 1;
+                }
+            }
+        }
+        
+        //Code part
+        for(int i=1;i<n+1;i++)
+        {
+            for(int j=1;j<amount+1;j++)
+            {
+                if(coins[i-1]<=j){
+                    tab[i][j] = tab[i][j-coins[i-1]] + tab[i-1][j];
+                }else{
+                    tab[i][j] = tab[i-1][j];
+                }
+            }
+        }
+        
+        return tab[n][amount];
+    }
+    
+    
+    int change(int amount, vector<int>& coins) {
+        
+        return coinChange(amount,coins.size(),coins);
+    }
