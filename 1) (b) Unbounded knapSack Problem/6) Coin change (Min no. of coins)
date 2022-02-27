@@ -1,0 +1,56 @@
+int coinChange(vector<int> &coins,int n, int amount)
+    {
+        //Storage or space
+        vector<vector<int>> tab(n+1,vector<int>(amount+1,-1));
+        
+        //Initialization
+        for(int i=0;i<n+1;i++)
+        {
+            for(int j=0;j<amount+1;j++)
+            {
+                if(j==0){
+                    tab[i][j] = 0;
+                }
+                
+                if(i==0){
+                    tab[i][j] = INT_MAX-1;
+                }
+            }
+        }
+        
+        
+        //Initialization for second row
+        for(int j=1;j<amount+1;j++)
+        {
+            if(j%coins[0]==0){
+                tab[1][j] = j/coins[0];
+            }else{
+                tab[1][j] = INT_MAX-1;
+            }
+        }
+        
+        
+        //Code part
+        for(int i=1;i<n+1;i++)
+        {
+            for(int j=1;j<amount+1;j++)
+            {
+                if(coins[i-1]<=j){
+                    tab[i][j] = min(1+tab[i][j-coins[i-1]],tab[i-1][j]);
+                }else{
+                    tab[i][j] = tab[i-1][j];
+                }
+            }
+        }
+        
+        if(tab[n][amount] == 2147483646){
+            return -1;
+        }
+        
+        return tab[n][amount];
+    }
+    
+    int coinChange(vector<int>& coins, int amount) {
+        
+        return coinChange(coins,coins.size(),amount);
+    }
