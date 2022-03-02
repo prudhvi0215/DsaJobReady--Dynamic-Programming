@@ -1,0 +1,37 @@
+int longestCommonSubstr (string x, string y, int n, int m)
+    {
+        // your code here
+        
+        //storage or space
+        
+        int result = 0; //For storing Longest common substring length.
+        vector<vector<int>> tab(n+1,vector<int>(m+1,-1));
+        
+        //Initialization
+        for(int i=0;i<n+1;i++)
+        {
+            for(int j=0;j<m+1;j++)
+            {
+                if(i==0||j==0){
+                    tab[i][j] = 0;
+                }
+            }
+        }
+        
+        //Code part
+        for(int i=1;i<n+1;i++)
+        {
+            for(int j=1;j<m+1;j++)
+            {
+                if(x[i-1]==y[j-1]){
+                    tab[i][j] = 1 + tab[i-1][j-1];
+                }else{
+                    tab[i][j] = 0;                // Only used in case for substring
+                }
+                
+                result = max(result,tab[i][j]);
+            }
+        }
+    
+        return result;
+    }
