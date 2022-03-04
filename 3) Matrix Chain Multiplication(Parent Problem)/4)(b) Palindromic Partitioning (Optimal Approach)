@@ -1,0 +1,75 @@
+bool isPalindrome(string s,int start,int stop)
+    {
+        bool palindrome = true;
+        
+        while(start<stop)
+        {
+            if(s[start]!=s[stop]){
+                palindrome = false;
+                break;
+            }
+            start++;
+            stop--;
+        }
+        
+        return palindrome;
+    }
+
+    int solve(string str,int i,int j,vector<vector<int>> &tab)
+    {
+        //Base case
+        if(i>=j){
+            return 0;
+        }
+        
+        //Memo code
+        if(tab[i][j]!=-1){
+            return tab[i][j];
+        }
+        
+        if(isPalindrome(str,i,j)){
+            return 0;
+        }
+        
+        
+        int output = INT_MAX;
+        
+        for(int k=i;k<j;k++)
+        {
+            
+            int left,right;
+            
+            if(tab[i][k]!=-1){
+                left = tab[i][k];
+            }else{
+                left = solve(str,i,k,tab);         // The optimisation is required on subproblems as well
+            }
+            
+            if(tab[k+1][j]!=-1){
+                right = tab[k+1][j];
+            }else{  
+                right = solve(str,k+1,j,tab);    // The optimisation is required on subproblems as well.
+            }
+            
+            
+            int tempAns = left+right+1; // "The reason for using the +1 is in the last of the statement is, since we are cutting the string into two partitions."
+            
+            output = min(output,tempAns);
+        }
+        
+        //Save for future use
+        tab[i][j] = output;
+        
+        return output;
+    }
+
+    
+    int palindromicPartition(string str)
+    {
+        // code here
+        int n = str.length();
+        
+        vector<vector<int>> tab(n+1,vector<int>(n+1,-1));
+        
+        return solve(str,0,n-1,tab);
+    }
