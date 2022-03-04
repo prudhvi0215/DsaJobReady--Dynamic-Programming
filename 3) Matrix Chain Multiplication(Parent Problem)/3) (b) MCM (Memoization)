@@ -1,0 +1,34 @@
+int MCM_DP(int arr[],int i,int j,vector<vector<int>> &tab)
+    {
+        //Base case
+        if(i>=j){
+            return 0;
+        }
+        
+        //Memo 
+        if(tab[i][j]!=-1){
+            return tab[i][j];
+        }
+        
+        int output = INT_MAX;
+        
+        for(int k=i;k<=j-1;k++)
+        {
+            int tempAns = MCM_DP(arr,i,k,tab)+MCM_DP(arr,k+1,j,tab)+(arr[i-1]*arr[k]*arr[j]);
+            
+            output = min(output,tempAns);
+        }
+        
+        //Saving for future use
+        tab[i][j] = output;
+        
+        return output;
+    }
+
+    int matrixMultiplication(int N, int arr[])
+    {
+        // code here
+        vector<vector<int>> tab(N+1,vector<int>(N+1,-1));
+        
+        return MCM_DP(arr,1,N-1,tab);
+    }
