@@ -1,0 +1,49 @@
+bool isPalindrome(string s,int start,int stop)
+    {
+        bool palindrome = true;
+        
+        while(start<stop)
+        {
+            if(s[start]!=s[stop]){
+                palindrome = false;
+                break;
+            }
+            start++;
+            stop--;
+        }
+        
+        return palindrome;
+    }
+
+    int solve(string str,int i,int j,vector<vector<int>> &tab)
+    {
+        //Base case
+        if(i>=j){
+            return 0;
+        }
+        
+        if(isPalindrome(str,i,j)){
+            return 0;
+        }
+        
+        
+        int output = INT_MAX;
+        
+        for(int k=i;k<j;k++)
+        { 
+            int tempAns = solve(str,i,k,tab)+solve(str,k+1,j,tab)+1; // "The reason for using the +1 is in the last of the statement is, since we are cutting the string into two partitions."
+            
+            output = min(output,tempAns);
+        }
+        
+        return output;
+    }
+
+    
+    int palindromicPartition(string str)
+    {
+        // code here
+        int n = str.length();
+        
+        return solve(str,0,n-1,tab);
+    }
