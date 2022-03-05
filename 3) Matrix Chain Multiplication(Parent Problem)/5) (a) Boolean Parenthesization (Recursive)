@@ -1,0 +1,67 @@
+int solve(string str,int i,int j,bool isTrue,unordered_map<string,int> &tab)
+    {
+        //Base case
+        if(i>j){
+            return 0;
+        }
+        
+        if(i==j){
+            if(isTrue){
+                if(str[i]=='T'){
+                    return 1;
+                }else{
+                    return 0;
+                }
+            }else{
+                if(str[i]=='F'){
+                    return 1;
+                }else{
+                    return 0;
+                }
+            }
+        }
+        
+        int ans = 0;
+        
+        for(int k=i+1;k<=j-1;k+=2)
+        {
+            int lT = solve(str,i,k-1,true,tab);
+            int lF = solve(str,i,k-1,false,tab);
+            int rT = solve(str,k+1,j,true,tab);
+            int rF = solve(str,k+1,j,false,tab);
+            
+            if(str[k]=='&')
+            {
+                if(isTrue){
+                    ans = ans + (lT * rT);
+                }else{
+                    ans = ans + (lT*rF) + (lF*rT) + (lF*rF);
+                }
+            }else if(str[k]=='|')
+            {
+                if(isTrue){
+                    ans = ans + (lT*rF) + (lF*rT) + (lT*rT);
+                }else{
+                    ans = ans + (lF*rF);
+                }
+            }else if(str[k]=='^')
+            {
+                if(isTrue){
+                    ans = ans + (lT*rF) + (lF*rT);
+                }else{
+                    ans = ans + (lT*rT) + (lF*rF);
+                }
+            }
+        }
+        
+        return ans%1003;
+    }
+
+
+    int countWays(int N, string S){
+        // code here
+        bool isTrue = true;
+        unordered_map<string,int> tab;
+        
+        return solve(S,0,S.length()-1,isTrue,tab);
+    }
