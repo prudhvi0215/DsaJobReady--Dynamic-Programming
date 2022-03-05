@@ -1,0 +1,49 @@
+bool solve(string s1,string s2,unordered_map<string,bool> &tab)
+    {
+        //Base case
+        if(s1.compare(s2)==0){
+            return true;
+        }
+        
+        if(s1.length()<=1){
+            return false;
+        }
+        
+        //Memo
+        string temp = s1;
+        temp.push_back(' ');
+        temp.append(s2);
+        
+        if(tab.find(temp)!=tab.end()){
+            return tab[temp];
+        }
+        
+        bool flag = false;
+        
+        for(int i=1;i<=s1.length()-1;i++)
+        {
+            bool swapCondition = solve(s1.substr(0,i),s2.substr(s2.length()-i,s2.length()),tab) && 
+                solve(s1.substr(i,s1.length()),s2.substr(0,s2.length()-i),tab);
+            
+            bool notSwapCondition = solve(s1.substr(0,i),s2.substr(0,i),tab) &&    solve(s1.substr(i,s1.length()),s2.substr(i,s2.length()),tab);
+            
+            if(swapCondition || notSwapCondition){
+                flag = true;
+                break;
+            }
+            
+        }
+        
+        //Save for future use
+        tab[temp] = flag;
+        
+        return flag;
+    }
+    
+    
+    bool isScramble(string s1, string s2) {
+        
+        unordered_map<string,bool> tab;
+        
+        return solve(s1,s2,tab);
+    }
