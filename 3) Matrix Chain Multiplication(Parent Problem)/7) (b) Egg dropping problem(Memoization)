@@ -1,0 +1,57 @@
+int solve(int e, int f,vector<vector<int>> &tab) 
+    {
+        // your code here
+        
+        //Base case
+        if(f==0||f==1){
+            return f;
+        }
+        
+        if(e==1){
+            return f;
+        }
+        
+        
+        //Memo 
+        if(tab[e][f]!=-1){
+            return tab[e][f];
+        }
+        
+        int mn = INT_MAX;
+        
+        for(int k=1;k<=f;k++)
+        {
+            int low,high;
+            
+            if(tab[e-1][k-1]!=-1){
+                low = tab[e-1][k-1];
+            }else{
+                low = solve(e-1,k-1,tab);
+                tab[e-1][k-1] = low;
+            }
+            
+            if(tab[e][f-k]!=-1){
+                high = tab[e][f-k];
+            }else{
+                high = solve(e,f-k,tab);
+                tab[e][f-k] = high;
+            }
+            
+            int temp = 1 + max(low,high);
+            
+            mn = min(mn,temp);
+        }
+ 
+        //Save for future use
+        tab[e][f] = mn;
+        
+        return mn;
+    }
+    
+    
+    int eggDrop(int e,int f)
+    {
+        vector<vector<int>> tab(e+1,vector<int>(f+1,-1));
+        
+        return solve(e,f,tab);
+    }
